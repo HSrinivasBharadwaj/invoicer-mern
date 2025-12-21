@@ -1,5 +1,4 @@
 export const ValidateSignUpData = (data) => {
-    console.log("data received",data)
     const {email,password,name,address,businessName} = data;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {

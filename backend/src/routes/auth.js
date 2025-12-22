@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const { ValidateSignUpData, ValidateLoginData } = require('../utils/validate');
 const authRouter = express.Router();
 
@@ -44,6 +45,15 @@ authRouter.post("/auth/login",async(req,res) => {
             return res.status(401).json({message: "Invalid Password"})
         }
         const { password:_,...userData } = findExistingUser.toObject();
+        const token = await jwt.sign(userData,process.env.SECRET,{
+            expiresIn: "1h"
+        })
+        const cookieOptions = {
+            httpOnly: true,
+            sameSite: "strict",
+            maxAge: 60 * 60 * 1000
+        }
+        res.cookie("token",token,cookieOptions)
         return res.status(200).json({ message: "Login successful", data: userData });
     } catch (error) {
         console.log("error",error);

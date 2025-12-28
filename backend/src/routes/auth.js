@@ -3,6 +3,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { ValidateSignUpData, ValidateLoginData } = require('../utils/validate');
+const ValidateToken = require('../middleware/validateToken');
 const authRouter = express.Router();
 
 //Post Request for signup
@@ -70,5 +71,7 @@ authRouter.post("/auth/logout",async(req,res) => {
         return res.status(500).json({message: "Internal Server Error"})
     }
 })
+
+
 
 module.exports = authRouter

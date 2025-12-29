@@ -29,7 +29,7 @@ export const ValidateSignUpData = (data) => {
     return true; 
 }
 
-export const ValidateLoginData = async (data) => {
+export const ValidateLoginData = (data) => {
     const { email, password } = data;
 
     // Validate email
@@ -48,3 +48,42 @@ export const ValidateLoginData = async (data) => {
 
     return true;
 };
+
+
+//Client Validation Logic
+export const ValidateClientSignUpData = (data) => {
+    const { name, email, address, phone } = data;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Email
+    if (!email || !emailRegex.test(email)) {
+        throw new Error("Invalid email address.");
+    }
+
+    // Name
+    if (!name || name.trim().length < 2) {
+        throw new Error("Name must not be empty and should have at least 2 characters.");
+    }
+
+    // Address
+    if (!address || address.trim().length === 0) {
+        throw new Error("Address must not be empty.");
+    }
+
+    // Phone - India OR USA only
+    if (!phone || phone.trim().length === 0) {
+        throw new Error("Phone number must not be empty.");
+    }
+
+    const cleanPhone = phone.replace(/[\s\-\(\)\+]/g, '');
+
+    const isIndian = /^[6-9]\d{9}$/.test(cleanPhone);
+    const isUSA = /^\d{10}$/.test(cleanPhone);
+
+    if (!isIndian && !isUSA) {
+        throw new Error("Phone number must be either Indian (10 digits starting with 6-9) or USA (10 digits). Examples: 9876543210 or 1234567890");
+    }
+
+    return true;
+}
